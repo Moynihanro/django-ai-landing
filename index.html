@@ -2221,10 +2221,9 @@
     nameInput.addEventListener('input', clearError);
     emailInput.addEventListener('input', clearError);
 
-    // Formspree endpoint — two options:
-    // 1. Quick: replace with your email → https://formspree.io/YOUR_EMAIL (first 50 free, no account)
-    // 2. Better: create a form at formspree.io → https://formspree.io/f/YOUR_FORM_ID
-    const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID';
+    // FormSubmit.co — no account needed, free forever
+    // First submission triggers a confirmation email to this address — click it once and you're live
+    const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/rowanmoynihan@gmail.com';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -2254,24 +2253,26 @@
         submitBtn.disabled = true;
         submitBtn.textContent = '...';
 
-        // Always save locally as backup
+        // Save locally as backup
         const entries = JSON.parse(localStorage.getItem('django_waitlist') || '[]');
         entries.push({ name, email, timestamp: new Date().toISOString() });
         localStorage.setItem('django_waitlist', JSON.stringify(entries));
 
-        // Submit to Formspree if configured
-        if (!FORMSPREE_URL.includes('YOUR_FORM_ID')) {
-            try {
-                const res = await fetch(FORMSPREE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ name, email })
-                });
-                if (!res.ok) throw new Error('Submission failed');
-            } catch (err) {
-                // Local backup already saved — show success anyway
-                console.warn('Formspree submission failed, saved locally:', err);
-            }
+        // Submit via FormSubmit.co
+        try {
+            const res = await fetch(FORMSUBMIT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    _subject: 'Django AI Waitlist — ' + name,
+                    _template: 'table'
+                })
+            });
+            if (!res.ok) throw new Error('Submission failed');
+        } catch (err) {
+            console.warn('FormSubmit failed, saved locally:', err);
         }
 
         formContainer.style.display = 'none';
