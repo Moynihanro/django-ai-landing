@@ -2143,13 +2143,10 @@
 
             <div id="formContainer">
                 <div class="form-shell">
-                    <form class="waitlist-form" id="waitlistForm" action="https://formsubmit.co/rowanmoynihan@gmail.com" method="POST" novalidate>
-                        <input type="hidden" name="_subject" value="Django AI Waitlist Signup">
-                        <input type="hidden" name="_next" value="https://moynihanro.github.io/django-ai-landing/?submitted=1">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="text" name="name" class="waitlist-input" id="nameInput" placeholder="Your name" required autocomplete="name" aria-label="Your name">
+                    <form class="waitlist-form" id="waitlistForm" novalidate>
+                        <input type="text" class="waitlist-input" id="nameInput" placeholder="Your name" required autocomplete="name" aria-label="Your name">
                         <div class="input-divider"></div>
-                        <input type="email" name="email" class="waitlist-input" id="emailInput" placeholder="Your email" required autocomplete="email" aria-label="Your email">
+                        <input type="email" class="waitlist-input" id="emailInput" placeholder="Your email" required autocomplete="email" aria-label="Your email">
                         <button type="submit" class="waitlist-submit" id="submitBtn">Join</button>
                     </form>
                 </div>
@@ -2224,39 +2221,29 @@
     nameInput.addEventListener('input', clearError);
     emailInput.addEventListener('input', clearError);
 
-    // FormSubmit.co — no account needed, free forever
-    // First submission redirects to FormSubmit confirmation page, then _next brings them back
-    // After confirmation, submissions email you directly and redirect back to ?submitted=1
-
-    // If returning from successful submission, show success state
-    if (new URLSearchParams(window.location.search).has('submitted')) {
-        formContainer.style.display = 'none';
-        success.classList.add('show');
-        history.replaceState(null, '', window.location.pathname);
-    }
+    // Mailto-based waitlist — no third party, works immediately
+    // Opens the visitor's email client with a pre-filled message to you
 
     form.addEventListener('submit', (e) => {
+        e.preventDefault();
         clearError();
 
         const name = nameInput.value.trim();
         const email = emailInput.value.trim();
 
         if (!name) {
-            e.preventDefault();
             showError('Name is required.');
             nameInput.focus();
             return;
         }
 
         if (!email) {
-            e.preventDefault();
             showError('Email is required.');
             emailInput.focus();
             return;
         }
 
         if (!validateEmail(email)) {
-            e.preventDefault();
             showError('Enter a valid email address.');
             emailInput.focus();
             return;
@@ -2267,9 +2254,13 @@
         entries.push({ name, email, timestamp: new Date().toISOString() });
         localStorage.setItem('django_waitlist', JSON.stringify(entries));
 
-        // Let the native form POST to FormSubmit.co
-        submitBtn.disabled = true;
-        submitBtn.textContent = '...';
+        // Open mailto with pre-filled subject and body
+        const subject = encodeURIComponent('Django AI Waitlist — ' + name);
+        const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nI\'d like to join the Django AI waitlist.');
+        window.location.href = 'mailto:rowanmoynihan@gmail.com?subject=' + subject + '&body=' + body;
+
+        formContainer.style.display = 'none';
+        success.classList.add('show');
     });
 </script>
 
