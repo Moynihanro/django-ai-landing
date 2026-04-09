@@ -7,6 +7,13 @@
     <meta name="description" content="A personal AI assistant that lives in iMessage. Connected to your calendar, email, health data, and knowledge base. Running on your hardware.">
     <meta property="og:title" content="Django AI — Your personal AI, in your pocket">
     <meta property="og:description" content="An iMessage AI assistant connected to your calendar, email, health data, and knowledge base. Self-hosted on a Mac Mini.">
+    <meta property="og:image" content="https://moynihanro.github.io/django-ai-landing/og-image.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Django AI — Your personal AI, in your pocket">
+    <meta name="twitter:description" content="An iMessage AI assistant connected to your calendar, email, health data, and knowledge base. Self-hosted on a Mac Mini.">
+    <meta name="twitter:image" content="https://moynihanro.github.io/django-ai-landing/og-image.svg">
     <meta property="og:type" content="website">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a1612'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='%23c9a84c' font-family='serif' font-weight='700'>D</text></svg>">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -137,6 +144,29 @@
         }
 
         .nav-logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        .nav-link {
+            font-family: 'Geist', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--bone-muted);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: color 0.3s var(--ease-out-expo);
+        }
+
+        .nav-link:hover { color: var(--bone); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
 
         .nav-cta {
             font-family: 'Geist', sans-serif;
@@ -1083,6 +1113,52 @@
             letter-spacing: -0.01em;
         }
 
+        .story-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(201, 168, 76, 0.08);
+        }
+
+        .story-avatar {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: var(--bg-warm);
+            border: 2px solid rgba(201, 168, 76, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-author-name {
+            font-family: 'Geist', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--bone);
+        }
+
+        .story-author-role {
+            font-family: 'Geist', sans-serif;
+            font-size: 0.78rem;
+            color: var(--bone-faint);
+            margin-top: 0.1rem;
+        }
+
         .timeline { position: relative; }
 
         .timeline::before {
@@ -1549,6 +1625,11 @@
 <!-- ── NAV ── -->
 <nav id="nav" aria-label="Main navigation">
     <div class="nav-logo">Django <span>AI</span></div>
+    <div class="nav-links">
+        <a href="#security" class="nav-link">Security</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#story" class="nav-link">Story</a>
+    </div>
     <a href="#waitlist" class="nav-cta">Join Waitlist</a>
 </nav>
 
@@ -1983,6 +2064,14 @@
                 <p class="reveal stagger-6 mt-6">
                     Every conversation, every piece of data, every note — it all goes into the same knowledge base. The system on day 30 is categorically different from day 1, not because the model improved, but because the context did.
                 </p>
+                <div class="story-author reveal stagger-7">
+                    <!-- Replace the initials div with: <img src="headshot.jpg" alt="Rowan Moynihan"> -->
+                    <div class="story-avatar">RM</div>
+                    <div>
+                        <div class="story-author-name">Rowan Moynihan</div>
+                        <div class="story-author-role">Builder of Django AI. Daily user since day 1.</div>
+                    </div>
+                </div>
             </div>
             <div class="timeline reveal">
                 <div class="timeline-item">
@@ -2104,9 +2193,10 @@
     nameInput.addEventListener('input', clearError);
     emailInput.addEventListener('input', clearError);
 
-    // Formspree endpoint — create yours at https://formspree.io and replace this ID
-    const FORMSPREE_ID = 'YOUR_FORM_ID';
-    const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_ID}`;
+    // Formspree endpoint — two options:
+    // 1. Quick: replace with your email → https://formspree.io/YOUR_EMAIL (first 50 free, no account)
+    // 2. Better: create a form at formspree.io → https://formspree.io/f/YOUR_FORM_ID
+    const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -2142,7 +2232,7 @@
         localStorage.setItem('django_waitlist', JSON.stringify(entries));
 
         // Submit to Formspree if configured
-        if (FORMSPREE_ID !== 'YOUR_FORM_ID') {
+        if (!FORMSPREE_URL.includes('YOUR_FORM_ID')) {
             try {
                 const res = await fetch(FORMSPREE_URL, {
                     method: 'POST',
