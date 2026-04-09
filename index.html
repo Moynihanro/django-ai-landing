@@ -755,6 +755,30 @@
 
         .bento-lg .bento-inner { padding: 2.5rem 2.25rem; }
 
+        .features-callout {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .features-callout a {
+            font-family: 'Geist', sans-serif;
+            font-size: 0.85rem;
+            color: var(--bone-muted);
+            text-decoration: none;
+            transition: color 0.3s var(--ease-out-expo);
+        }
+
+        .features-callout a:hover { color: var(--gold); }
+
+        .features-callout .callout-arrow {
+            display: inline-block;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .features-callout a:hover .callout-arrow {
+            transform: translateX(3px);
+        }
+
         /* ── COMPARISON ── */
         .comparison {
             background: var(--bg-warm);
@@ -1626,7 +1650,7 @@
 <nav id="nav" aria-label="Main navigation">
     <div class="nav-logo">Django <span>AI</span></div>
     <div class="nav-links">
-        <a href="#security" class="nav-link">Security</a>
+        <a href="#security" class="nav-link">Security &amp; Privacy</a>
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="#story" class="nav-link">Story</a>
     </div>
@@ -1875,6 +1899,10 @@
                     <p>New tools, custom commands, expanded integrations. The system compounds over time.</p>
                 </div>
             </div>
+        </div>
+
+        <div class="features-callout reveal">
+            <a href="#security">All of this runs on your hardware, behind your private network. See how we protect your data <span class="callout-arrow">&#8594;</span></a>
         </div>
     </div>
 </section>
